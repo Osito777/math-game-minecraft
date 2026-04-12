@@ -1,81 +1,97 @@
 import streamlit as st
 import random
+import time
 
-# Configuración visual de Minecraft
-st.set_page_config(page_title="Minecraft Hardcore Math", page_icon="💀")
+# Configuración visual
+st.set_page_config(page_title="Minecraft Boss Rush", page_icon="⚔️")
 
-# CSS para estilo Minecraft Avanzado
+# Estilo Minecraft
 st.markdown("""
     <style>
-    .main { background-color: #0f0f0f; color: #ffffff; }
-    .stButton>button { 
-        background-color: #3c3c3c; 
-        color: #55FF55; 
-        border: 2px solid #000;
-        font-family: 'Courier New', monospace;
-        font-size: 20px;
-    }
-    h1 { color: #AA0000; text-shadow: 3px 3px #000; font-family: 'Courier New'; }
-    .stRadio label { color: #00AAAA !important; font-size: 18px; }
+    .main { background-color: #121212; color: #ffffff; }
+    .stButton>button { width: 100%; background-color: #3e3e3e; color: #55FF55; border: 2px solid #000; }
+    h1 { color: #FF55FF; text-shadow: 2px 2px #000; font-family: 'Courier New'; }
+    .boss-msg { color: #FF5555; font-size: 25px; font-weight: bold; text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("💀 MINECRAFT MATH: Nivel Hardcore")
-
-# Banco de 20 preguntas COMPLEJAS
+# 1. Base de datos de preguntas por niveles
 if 'preguntas' not in st.session_state:
-    db = [
-        {"p": "Calcula la potencia de un faro: $(2^2)^3$. ¿Cuántos bloques de alcance tiene?", "ops": ["12", "64", "32"], "c": "64"},
-        {"p": "Un mapa del tesoro indica una distancia de $\sqrt{\sqrt{256}}$ chunks. ¿Cuánto es?", "ops": ["16", "4", "8"], "c": "4"},
-        {"p": "Para invocar al Wither necesitas $3^4 - 2^5$ bloques. ¿Cuántos son?", "ops": ["49", "17", "43"], "c": "49"},
-        {"p": "La raíz cuadrada de la potencia $10^4$ es:", "ops": ["100", "1000", "50"], "c": "100"},
-        {"p": "Calcula el volumen de un cubo de TNT si su lado es $\sqrt{64}$:", "ops": ["512", "64", "256"], "c": "512"},
-        {"p": "¿Cuál es el valor de $5^3 + \sqrt{144}$?", "ops": ["137", "113", "144"], "c": "137"},
-        {"p": "Un Enderman se mueve a $(3^2)^2$ metros de distancia. ¿Cuánto es?", "ops": ["18", "81", "27"], "c": "81"},
-        {"p": "La raíz cúbica de $8^2$ es equivalente a:", "ops": ["4", "2", "8"], "c": "4"},
-        {"p": "Si un stack de diamantes se eleva a la potencia 0 ($64^0$), ¿cuántos tienes?", "ops": ["0", "1", "64"], "c": "1"},
-        {"p": "Calcula: $\sqrt{100} + \sqrt{81} + \sqrt{64}$", "ops": ["27", "24", "25"], "c": "27"},
-        {"p": "Un servidor tiene $2^{10}$ espacios para jugadores. ¿Cuántos son?", "ops": ["512", "1024", "2048"], "c": "1024"},
-        {"p": "La mitad de la raíz cuadrada de 400 es:", "ops": ["20", "10", "5"], "c": "10"},
-        {"p": "¿Qué es mayor: $2^6$ o $4^3$?", "ops": ["Son iguales", "2^6 es mayor", "4^3 es mayor"], "c": "Son iguales"},
-        {"p": "Calcula: $(10^2 - 8^2)$ y saca su raíz cuadrada:", "ops": ["6", "4", "2"], "c": "6"},
-        {"p": "La potencia $7^3$ representa los bloques de una pirámide. ¿Cuánto es?", "ops": ["243", "343", "49"], "c": "343"},
-        {"p": "Si $\sqrt{x} = 14$, ¿cuántos bloques vale x?", "ops": ["196", "169", "256"], "c": "196"},
-        {"p": "Calcula la raíz cúbica de $216$:", "ops": ["4", "6", "8"], "c": "6"},
-        {"p": "Resuelve: $2^3 \times \sqrt{16}$", "ops": ["32", "24", "48"], "c": "32"},
-        {"p": "El área de una base es $12^2$. Si le quitas $\sqrt{100}$, ¿cuánto queda?", "ops": ["134", "44", "24"], "c": "134"},
-        {"p": "¿Cuál es la raíz cuadrada de $2^8$?", "ops": ["16", "32", "64"], "c": "16"}
+    facil = [
+        {"p": "Steve tiene $2^3$ bloques de oro. ¿Cuántos son?", "ops": ["6", "8", "16"], "c": "8"},
+        {"p": "Raíz cuadrada de 49: $\sqrt{49}$", "ops": ["7", "9", "6"], "c": "7"},
+        {"p": "Un stack es $4^3$. ¿Cuántos bloques tiene?", "ops": ["16", "64", "32"], "c": "64"},
+        {"p": "La $\sqrt{64}$ espacios de un cofre:", "ops": ["8", "6", "10"], "c": "8"},
+        {"p": "Calcula $5^2$ antorchas:", "ops": ["10", "25", "50"], "c": "25"},
+        {"p": "Raíz cúbica de 27: $\sqrt[3]{27}$", "ops": ["3", "9", "6"], "c": "3"}
     ]
-    random.shuffle(db) # Esto desordena las preguntas cada vez
-    st.session_state.preguntas = db
+    medio = [
+        {"p": "Calcula: $(3^2)^2$ metros de distancia:", "ops": ["18", "81", "27"], "c": "81"},
+        {"p": "Raíz de raíz: $\sqrt{\sqrt{256}}$", "ops": ["4", "8", "16"], "c": "4"},
+        {"p": "Resuelve: $2^5 - 10$", "ops": ["22", "32", "12"], "c": "22"},
+        {"p": "La $\sqrt{144} + \sqrt{25}$ es:", "ops": ["17", "19", "13"], "c": "17"},
+        {"p": "Potencia de $4^3$ dividido entre 2:", "ops": ["32", "16", "64"], "c": "32"},
+        {"p": "Raíz cúbica de 125: $\sqrt[3]{125}$", "ops": ["5", "15", "25"], "c": "5"},
+        {"p": "Si $x^2 = 121$, ¿cuánto vale x?", "ops": ["11", "12", "13"], "c": "11"}
+    ]
+    dificil = [
+        {"p": "HARDCORE: $\sqrt{100} + 3^3 - \sqrt{81}$", "ops": ["28", "30", "26"], "c": "28"},
+        {"p": "Calcula: $(10^2 - 8^2)$ y saca su raíz:", "ops": ["6", "4", "36"], "c": "6"},
+        {"p": "Potencia de potencias: $(2^3)^2$", "ops": ["64", "32", "16"], "c": "64"},
+        {"p": "La $\sqrt{225}$ multiplicada por 2:", "ops": ["30", "25", "45"], "c": "30"},
+        {"p": "Raíz cúbica de $216$:", "ops": ["6", "8", "4"], "c": "6"},
+        {"p": "Resuelve: $7^2 + \sqrt{1}$", "ops": ["50", "49", "51"], "c": "50"},
+        {"p": "FINAL: $\sqrt{16} \times 2^2$", "ops": ["16", "8", "32"], "c": "16"}
+    ]
+    st.session_state.preguntas = facil + medio + dificil
     st.session_state.score = 0
     st.session_state.current = 0
+    st.session_state.boss_visible = False
 
-# Lógica del juego
-if st.session_state.current < len(st.session_state.preguntas):
-    q = st.session_state.preguntas[st.session_state.current]
-    st.write(f"### NIVEL {st.session_state.current + 1} / 20")
+# Función para mostrar animaciones de Jefes
+def mostrar_jefe(nombre, gif_url):
+    st.markdown(f"<p class='boss-msg'>¡JEFE APARECE: {nombre}!</p>", unsafe_allow_html=True)
+    st.image(gif_url)
+    if st.button(f"DERROTAR AL {nombre} ⚔️"):
+        st.session_state.boss_visible = False
+        st.session_state.current += 1
+        st.rerun()
+
+# 2. Lógica de niveles y animaciones
+curr = st.session_state.current
+
+# Verificar si toca Boss
+if curr == 6 and st.session_state.boss_visible: # Fin Nivel Fácil
+    mostrar_jefe("ENDER DRAGON", "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJtZzZ5NXF6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/H1SXXLaWirIEuC69Pk/giphy.gif")
+elif curr == 13 and st.session_state.boss_visible: # Fin Nivel Medio
+    mostrar_jefe("WITHER", "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZyeXd4ZHJ6NXF6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/A6Prmit6dhv32/giphy.gif")
+elif curr == 20: # Fin del Juego
+    st.balloons()
+    st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJtZzZ5NXF6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/X9YInZ3m9vM3A44L5C/giphy.gif") # Warden / Win
+    st.write(f"## 🏆 ¡ERES EL REY DE LAS MATEMÁTICAS! Score: {st.session_state.score}/20")
+    if st.button("Reiniciar"):
+        st.session_state.current = 0
+        st.session_state.score = 0
+        st.rerun()
+else:
+    # Mostrar Preguntas
+    q = st.session_state.preguntas[curr]
+    st.title(f"Nivel: {'Fácil' if curr < 6 else 'Medio' if curr < 13 else 'DIFÍCIL'}")
+    st.write(f"### Pregunta {curr + 1}")
     st.subheader(q["p"])
     
-    ans = st.radio("Selecciona tu respuesta:", q["ops"], key=f"r{st.session_state.current}")
+    ans = st.radio("Alternativas:", q["ops"], key=f"r{curr}")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("ATACAR ⚔️"):
-            if ans == q["c"]:
-                st.success("¡CRÍTICO! Has derrotado al mob 💎")
-                st.session_state.score += 1
-            else:
-                st.error(f"¡PERDISTE VIDA! La respuesta era {q['c']} 💔")
-            
+    if st.button("ENVIAR ⚔️"):
+        if ans == q["c"]:
+            st.success("¡ACIERTO!")
+            st.session_state.score += 1
+        else:
+            st.error(f"¡FALLO! Era {q['c']}")
+        
+        # Activar Boss si es la última del nivel
+        if curr in [5, 12, 19]:
+            st.session_state.boss_visible = True
+        else:
             st.session_state.current += 1
-            st.rerun()
-
-    st.progress(st.session_state.current / 20)
-else:
-    st.balloons()
-    st.write(f"## 🏆 ¡HAS SOBREVIVIDO AL MODO HARDCORE!")
-    st.write(f"Puntuación final: **{st.session_state.score} / 20**")
-    if st.button("Reiniciar Mundo"):
-        del st.session_state.preguntas
         st.rerun()
