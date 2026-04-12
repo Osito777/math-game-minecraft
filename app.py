@@ -41,49 +41,18 @@ curr = st.session_state.current
 
 if st.session_state.get('boss_active', False):
     if curr == 6:
-        st.write("### ⚠️ ENDER DRAGON")
-        st.image("https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif")
-        if st.button("ESPADA ORO ⚔️"):
+        st.write("## ⚠️ ¡EL ENDER DRAGON HA APARECIDO!")
+        st.image("https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", width=700)
+        if st.button("DERROTAR CON ESPADA DE ORO ⚔️"):
             st.session_state.boss_active = False
             st.rerun()
     elif curr == 13:
-        st.write("### 💀 WITHER")
-        st.image("https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif")
-        if st.button("ESPADA DIAMANTE 💎"):
+        st.write("## 💀 ¡EL WITHER ESTÁ AQUÍ!")
+        st.image("https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", width=700)
+        if st.button("DERROTAR CON ESPADA DE DIAMANTE 💎"):
             st.session_state.boss_active = False
             st.rerun()
     elif curr == 20:
-        st.write("### 🕶️ WARDEN")
-        st.image("https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif")
-        if st.button("ESPADA NETHERITE 🔥"):
-            st.session_state.boss_active = False
-            st.rerun()
-
-elif curr < len(st.session_state.preguntas):
-    q = st.session_state.preguntas[curr]
-    if curr < 6: btn, img = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
-    elif curr < 13: btn, img = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
-    else: btn, img = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
-    
-    st.title("Minecraft Math")
-    col1, col2 = st.columns([3, 1])
-    col1.write(f"Pregunta {curr + 1}/20")
-    col1.subheader(q["p"])
-    col2.image(img, width=70)
-    
-    ans = st.radio("Respuesta:", q["ops"], key=f"r{curr}")
-    if st.button(f"ATACAR CON {btn} ⚔️"):
-        if ans == q["c"]: st.success("¡Bien!"); st.session_state.score += 1
-        else: st.error(f"¡Mal! Era {q['c']}")
-        st.session_state.current += 1
-        if st.session_state.current in [6, 13, 20]: st.session_state.boss_active = True
-        st.rerun()
-else:
-    st.balloons()
-    st.title("🏆 ¡GANASTE!")
-    st.write(f"Puntos: {st.session_state.score}/20")
-    if st.button("REINICIAR"):
-        st.session_state.current = 0
-        st.session_state.score = 0
-        st.session_state.boss_active = False
-        st.rerun()
+        st.write("## 🕶️ ¡EL WARDEN TE HA DETECTADO!")
+        st.image("https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", width=700)
+        if st.button("ESCAPE
