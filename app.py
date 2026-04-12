@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 st.set_page_config(page_title="Math Craft", page_icon="⚔️")
 
@@ -32,6 +33,12 @@ if 'preguntas' not in st.session_state:
         {"p": "(10^2 - 8^2) + Raiz de 1", "ops": ["37", "36", "19"], "c": "37"},
         {"p": "FINAL: Raiz de 625 - 5^2", "ops": ["0", "5", "25"], "c": "0"}
     ]
+    
+    # Aleatoriedad: Mezclamos cada lista por separado para mantener los niveles
+    random.shuffle(f)
+    random.shuffle(m)
+    random.shuffle(d)
+    
     st.session_state.preguntas = f + m + d
     st.session_state.score = 0
     st.session_state.current = 0
@@ -47,13 +54,13 @@ if st.session_state.get('boss_active', False):
             st.session_state.boss_active = False
             st.rerun()
     elif curr == 13:
-        st.write("## 💀 ¡EL WITHER!")
+        st.write("## 💀 ¡EL WITHER ESTÁ AQUÍ!")
         st.image("https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", width=700)
         if st.button("DERROTAR CON DIAMANTE 💎"):
             st.session_state.boss_active = False
             st.rerun()
     elif curr == 20:
-        st.write("## 🕶️ ¡EL WARDEN!")
+        st.write("## 🕶️ ¡EL WARDEN TE HA DETECTADO!")
         st.image("https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", width=700)
         if st.button("ESCAPE CON NETHERITE 🔥"):
             st.session_state.boss_active = False
@@ -68,15 +75,21 @@ elif curr < len(st.session_state.preguntas):
     st.title("Minecraft Math")
     col1, col2 = st.columns([3, 1])
     col1.write(f"Pregunta {curr + 1}/20")
-    col1.subheader(q["p"])
+    # Añadimos las calaveras aquí:
+    col1.subheader(f"💀 {q['p']} 💀")
     col2.image(img, width=70)
     
     ans = st.radio("Respuesta:", q["ops"], key=f"r{curr}")
     if st.button(f"ATACAR CON {btn} ⚔️"):
-        if ans == q["c"]: st.success("¡Bien!"); st.session_state.score += 1
-        else: st.error(f"¡Mal! Era {q['c']}")
+        if ans == q["c"]: 
+            st.success("¡Bien!")
+            st.session_state.score += 1
+        else: 
+            st.error(f"¡Mal! Era {q['c']}")
+        
         st.session_state.current += 1
-        if st.session_state.current in [6, 13, 20]: st.session_state.boss_active = True
+        if st.session_state.current in [6, 13, 20]: 
+            st.session_state.boss_active = True
         st.rerun()
     st.progress(curr / 20)
 else:
@@ -84,7 +97,6 @@ else:
     st.title("🏆 ¡GANASTE!")
     st.write(f"Puntos: {st.session_state.score}/20")
     if st.button("REINICIAR"):
-        st.session_state.current = 0
-        st.session_state.score = 0
-        st.session_state.boss_active = False
+        # Al reiniciar, borramos preguntas para que se vuelvan a mezclar al recargar
+        del st.session_state.preguntas
         st.rerun()
