@@ -14,16 +14,14 @@ st.markdown("""
 
 if 'preguntas' not in st.session_state:
     f = [
-        {"p": "Steve tiene $2^4$ bloques. Si explotan $\sqrt{16}$, ¿quedan?", "ops": ["12", "8", "4"], "c": "12"},
-        {"p": "¿$\sqrt{144}$ por $2$?", "ops": ["24", "12", "48"], "c": "24"},
-        {"p": "$3^3 + \sqrt{81}$", "ops": ["36", "30", "27"], "c": "36"},
-        {"p": "$2^6$ espacios. Mitad ocupada, ¿quedan?", "ops": ["32", "16", "64"], "c": "32"},
-        {"p": "$\sqrt[3]{64} + 5^2$", "ops": ["29", "21", "24"], "c": "29"},
-        {"p": "FINAL L1: $\sqrt{400} / 5$", "ops": ["4", "8", "20"], "c": "4"}
+        {"p": "Steve tiene 2^4 bloques. Si explotan la raiz de 16, ¿cuantos quedan?", "ops": ["12", "8", "4"], "c": "12"},
+        {"p": "Calcula: Raiz de 144 multiplicado por 2", "ops": ["24", "12", "48"], "c": "24"},
+        {"p": "Resuelve: 3^3 + Raiz de 81", "ops": ["36", "30", "27"], "c": "36"},
+        {"p": "2^6 espacios en un cofre. Mitad ocupada, ¿cuantos quedan?", "ops": ["32", "16", "64"], "c": "32"},
+        {"p": "Raiz cubica de 64 + 5^2", "ops": ["29", "21", "24"], "c": "29"},
+        {"p": "FINAL NIVEL 1: Raiz de 400 dividido 5", "ops": ["4", "8", "20"], "c": "4"}
     ]
     m = [
-        {"p": "WITHER: $(2^3)^2 - \sqrt{16}$", "ops": ["60", "32", "64"], "c": "60"},
-        {"p": "$\sqrt{\sqrt{625}}$", "ops": ["5", "25", "10"], "c": "5"},
-        {"p": "¿$5^3$ o $11^2$?", "ops": ["5^3", "11^2", "Iguales"], "c": "5^3"},
-        {"p": "$\sqrt{225} \\times \sqrt{4}$", "ops": ["30", "15", "60"], "c": "30"},
-        {"p": "Portal: alto $\sqrt{144}$, ancho $\sqrt{100}$.
+        {"p": "WITHER: (2^3)^2 - Raiz de 16", "ops": ["60", "32", "64"], "c": "60"},
+        {"p": "Calcula la raiz de la raiz de 625", "ops": ["5", "25", "10"], "c": "5"},
+        {"p": "¿Que
