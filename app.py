@@ -34,12 +34,18 @@ if 'preguntas' not in st.session_state:
         {"p": "FINAL: Raiz de 625 - 5^2", "ops": ["0", "5", "25"], "c": "0"}
     ]
     
-    # Aleatoriedad: Mezclamos cada lista por separado para mantener los niveles
+    # Mezclamos el orden de las preguntas
     random.shuffle(f)
     random.shuffle(m)
     random.shuffle(d)
     
-    st.session_state.preguntas = f + m + d
+    todas = f + m + d
+    
+    # NUEVO: Mezclamos las opciones de respuesta de cada pregunta
+    for pregunta in todas:
+        random.shuffle(pregunta["ops"])
+    
+    st.session_state.preguntas = todas
     st.session_state.score = 0
     st.session_state.current = 0
     st.session_state.boss_active = False
@@ -75,7 +81,6 @@ elif curr < len(st.session_state.preguntas):
     st.title("Minecraft Math")
     col1, col2 = st.columns([3, 1])
     col1.write(f"Pregunta {curr + 1}/20")
-    # Añadimos las calaveras aquí:
     col1.subheader(f"💀 {q['p']} 💀")
     col2.image(img, width=70)
     
@@ -97,6 +102,5 @@ else:
     st.title("🏆 ¡GANASTE!")
     st.write(f"Puntos: {st.session_state.score}/20")
     if st.button("REINICIAR"):
-        # Al reiniciar, borramos preguntas para que se vuelvan a mezclar al recargar
         del st.session_state.preguntas
         st.rerun()
