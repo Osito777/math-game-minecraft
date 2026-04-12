@@ -38,4 +38,5 @@ if 'preguntas' not in st.session_state:
         {"p": "Calcula la raíz de una raíz: $\sqrt{\sqrt{625}}$", "ops": ["5", "25", "10"], "c": "5"},
         {"p": "¿Qué es mayor: $5^3$ o $11^2$?", "ops": ["5^3", "11^2", "Iguales"], "c": "5^3"},
         {"p": "Resuelve: $\sqrt{225} \times \sqrt{4}$", "ops": ["30", "15", "60"], "c": "30"},
-        {"p": "Si un portal mide $\sqrt{144}$ de alto y $\sqrt{100}$ de ancho, ¿cuál es su área?", "ops": ["120
+        {"p": "Si un portal mide $\sqrt{144}$ de alto y $\sqrt{100}$ de ancho, ¿cuál es su área?", "ops": ["120", "22", "200"], "c": "120"},
+        {"p": "Calcul
