@@ -30,29 +30,4 @@ if 'preguntas' not in st.session_state:
         {"p": "2^7 / Raiz de 64", "ops": ["16", "32", "8"], "c": "16"},
         {"p": "Warden: R-cubica 216 + 7^2", "ops": ["55", "49", "60"], "c": "55"},
         {"p": "(10^2 - 8^2) + Raiz de 1", "ops": ["37", "36", "19"], "c": "37"},
-        {"p": "FINAL: Raiz de 625 - 5^2", "ops": ["0", "5", "25"], "c": "0"}
-    ]
-    st.session_state.preguntas = f + m + d
-    st.session_state.score = 0
-    st.session_state.current = 0
-    st.session_state.boss_active = False
-
-curr = st.session_state.current
-
-if st.session_state.get('boss_active', False):
-    if curr == 6:
-        st.write("## ⚠️ ¡EL ENDER DRAGON HA APARECIDO!")
-        st.image("https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", width=700)
-        if st.button("DERROTAR CON ESPADA DE ORO ⚔️"):
-            st.session_state.boss_active = False
-            st.rerun()
-    elif curr == 13:
-        st.write("## 💀 ¡EL WITHER ESTÁ AQUÍ!")
-        st.image("https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", width=700)
-        if st.button("DERROTAR CON ESPADA DE DIAMANTE 💎"):
-            st.session_state.boss_active = False
-            st.rerun()
-    elif curr == 20:
-        st.write("## 🕶️ ¡EL WARDEN TE HA DETECTADO!")
-        st.image("https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", width=700)
-        if st.button("ESCAPE
+        {"p": "FINAL: Raiz de
