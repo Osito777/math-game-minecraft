@@ -9,13 +9,13 @@ st.markdown("""
     .main { background-color: #0d0d0d; color: white; }
     .stButton>button { width: 100%; background-color: #2e2e2e; color: #FF5555; border: 2px solid #FF5555; font-family: monospace; }
     h1 { color: #FF55FF; text-shadow: 2px 2px #000; text-align: center; }
-    .heart { color: #FF5555; font-size: 24px; }
+    .heart { color: #FF5555; font-size: 30px; text-align: center; margin-bottom: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
 # --- INICIALIZACIÓN ---
 if 'preguntas' not in st.session_state:
-    # NIVEL FÁCIL (Pero ya con truco)
+    # Preguntas de alta dificultad
     f = [
         {"p": "Steve tiene 2^5 bloques. Explota la raiz de 64. ¿Quedan?", "ops": ["24", "26", "28"], "c": "24"},
         {"p": "Raiz de 256 dividido por 2^2", "ops": ["4", "8", "16"], "c": "4"},
@@ -24,7 +24,6 @@ if 'preguntas' not in st.session_state:
         {"p": "Raiz cubica de 125 multiplicada por 2^3", "ops": ["40", "15", "60"], "c": "40"},
         {"p": "BOSS 1: (5^2 * 2) / raiz de 25", "ops": ["10", "20", "5"], "c": "10"}
     ]
-    # NIVEL MEDIO (Operaciones combinadas)
     m = [
         {"p": "WITHER: raiz de 625 + 2^6 - 10", "ops": ["79", "69", "89"], "c": "79"},
         {"p": "Raiz de (144 + 25) + 3^2", "ops": ["22", "13", "18"], "c": "22"},
@@ -34,7 +33,6 @@ if 'preguntas' not in st.session_state:
         {"p": "4^3 / 2^4 + raiz de 100", "ops": ["14", "12", "18"], "c": "14"},
         {"p": "BOSS 2: raiz(raiz(1296)) * 2", "ops": ["12", "18", "6"], "c": "12"}
     ]
-    # NIVEL DIFÍCIL (Hardcore)
     d = [
         {"p": "WARDEN: (10^2 - 8^2) / raiz de 9", "ops": ["12", "36", "10"], "c": "12"},
         {"p": "Raiz cubica de 729 + 4^3 - 2^5", "ops": ["41", "51", "31"], "c": "41"},
@@ -45,64 +43,70 @@ if 'preguntas' not in st.session_state:
         {"p": "FINAL: 1^100 + 0^5 - (raiz de 1)", "ops": ["0", "1", "100"], "c": "0"}
     ]
     
+    # Aleatoriedad total
     random.shuffle(f); random.shuffle(m); random.shuffle(d)
     st.session_state.preguntas = f + m + d
+    
+    # Mezclamos las opciones de cada pregunta
+    for p in st.session_state.preguntas:
+        random.shuffle(p["ops"])
+        
     st.session_state.score = 0
     st.session_state.current = 0
     st.session_state.boss_active = False
-    st.session_state.vidas = 3  # Empezamos con 3 vidas
+    st.session_state.vidas = 5  # <--- AHORA SON 5 VIDAS
+    st.session_state.game_over = False
 
-# --- LÓGICA DE VIDAS ---
+# --- LÓGICA DE DERROTA ---
 if st.session_state.vidas <= 0:
-    st.title("💀 GAME OVER 💀")
-    st.image("https://media.tenor.com/7Yf0L2G1H6sAAAAi/minecraft-death.gif")
-    st.write(f"Has caído en combate. Puntuación final: {st.session_state.score}/20")
-    if st.button("REINTENTAR (RESPAWN) 🔄"):
+    st.markdown("<h1>💀 GAME OVER 💀</h1>", unsafe_allow_html=True)
+    st.image("https://media.tenor.com/7Yf0L2G1H6sAAAAi/minecraft-death.gif", width=700)
+    st.error(f"Has perdido todos tus corazones. Te quedaste en el nivel {st.session_state.current + 1}.")
+    if st.button("RESPAWN EN EL INICIO 🔄"):
         del st.session_state.preguntas
         st.rerun()
     st.stop()
 
-# --- INTERFAZ ---
+# --- INTERFAZ PRINCIPAL ---
 curr = st.session_state.current
-vidas_html = " ❤️ " * st.session_state.vidas
-st.markdown(f"<p class='heart'>{vidas_html}</p>", unsafe_allow_html=True)
+vidas_visuales = "❤️" * st.session_state.vidas
+st.markdown(f"<p class='heart'>{vidas_visuales}</p>", unsafe_allow_html=True)
 
-# --- JEFES ---
+# --- SISTEMA DE BOSSES ---
 if st.session_state.get('boss_active', False):
-    bosses = {
+    boss_data = {
         6: ["⚠️ ENDER DRAGON", "https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", "ORO"],
-        13: ["💀 WITHER", "https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", "DIAMANTE"],
-        20: ["🕶️ WARDEN", "https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", "NETHERITE"]
+        13: ["💀 EL WITHER", "https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", "DIAMANTE"],
+        20: ["🕶️ EL WARDEN", "https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", "NETHERITE"]
     }
-    nombre, img_url, mat = bosses[curr]
+    nombre, img, material = boss_data[curr]
     st.write(f"## {nombre}")
-    st.image(img_url, width=700)
-    if st.button(f"ATAQUE CRÍTICO DE {mat} ⚔️"):
+    st.image(img, width=700)
+    if st.button(f"GOLPE FINAL CON {material} ⚔️"):
         st.session_state.boss_active = False
         st.rerun()
 
-# --- PREGUNTAS ---
+# --- SISTEMA DE PREGUNTAS ---
 elif curr < len(st.session_state.preguntas):
     q = st.session_state.preguntas[curr]
-    if curr < 6: b, i = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
-    elif curr < 13: b, i = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
-    else: b, i = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
+    if curr < 6: color, espada = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
+    elif curr < 13: color, espada = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
+    else: color, espada = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
     
-    st.title("Minecraft Math: HARDCORE")
-    col1, col2 = st.columns([3, 1])
-    col1.write(f"Desafío {curr + 1}/20")
-    col1.subheader(f"💀 {q['p']} 💀")
-    col2.image(i, width=70)
+    st.title("Math Craft: Hardcore")
+    c1, c2 = st.columns([3, 1])
+    c1.write(f"**Nivel {curr + 1} de 20** | Puntos: {st.session_state.score}")
+    c1.subheader(f"💀 {q['p']} 💀")
+    c2.image(espada, width=80)
     
-    # Mezclamos opciones si es la primera vez que vemos la pregunta
-    ans = st.radio("Elige con cuidado:", q["ops"], key=f"r{curr}")
+    respuesta = st.radio("Selecciona tu respuesta:", q["ops"], key=f"r{curr}")
     
-    if st.button(f"GOLPE DE {b} ⚔️"):
-        if ans == q["c"]:
-            st.success("¡IMPACTO!")
+    if st.button(f"ATACAR CON {color} ⚔️"):
+        if respuesta == q["c"]:
+            st.success("¡ACIERTO! Sigues con vida.")
             st.session_state.score += 1
         else:
-            st.error(f"¡FALLASTE! Perdiste un corazón. Era {q['c']}")
+            st.error(f"¡FALLASTE! Perdiste un corazón. La respuesta era {q['c']}")
             st.session_state.vidas -= 1
         
         st.session_state.current += 1
@@ -111,10 +115,10 @@ elif curr < len(st.session_state.preguntas):
         st.rerun()
     st.progress(curr / 20)
 
+# --- VICTORIA ---
 else:
     st.balloons()
-    st.title("🏆 ¡LEYENDA DEL OVERWORLD!")
-    st.write(f"Puntuación Perfecta: {st.session_state.score}/20")
-    if st.button("NUEVA AVENTURA 🔄"):
-        del st.session_state.preguntas
-        st.rerun()
+    st.title("🏆 ¡MAESTRO DEL HARDCORE!")
+    st.write(f"Has sobrevivido con {st.session_state.vidas} corazones.")
+    st.write(f"Puntuación final: {st.session_state.score}/20")
+    if st.
