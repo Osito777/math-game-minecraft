@@ -1,106 +1,120 @@
 import streamlit as st
 import random
 
-st.set_page_config(page_title="Math Craft", page_icon="⚔️")
+st.set_page_config(page_title="Math Craft: Hardcore", page_icon="💀")
 
-# Estilo
-st.markdown("<style>.main{background-color:#0d0d0d;color:white}button{width:100%}</style>", unsafe_allow_html=True)
+# --- ESTILO ---
+st.markdown("""
+    <style>
+    .main { background-color: #0d0d0d; color: white; }
+    .stButton>button { width: 100%; background-color: #2e2e2e; color: #FF5555; border: 2px solid #FF5555; font-family: monospace; }
+    h1 { color: #FF55FF; text-shadow: 2px 2px #000; text-align: center; }
+    .heart { color: #FF5555; font-size: 24px; }
+    </style>
+    """, unsafe_allow_html=True)
 
+# --- INICIALIZACIÓN ---
 if 'preguntas' not in st.session_state:
+    # NIVEL FÁCIL (Pero ya con truco)
     f = [
-        {"p": "Steve tiene 2^4 bloques. Si explotan raiz de 16, quedan?", "ops": ["12", "8", "4"], "c": "12"},
-        {"p": "Raiz de 144 multiplicado por 2", "ops": ["24", "12", "48"], "c": "24"},
-        {"p": "3^3 + Raiz de 81", "ops": ["36", "30", "27"], "c": "36"},
-        {"p": "2^6 espacios. Mitad ocupada, quedan?", "ops": ["32", "16", "64"], "c": "32"},
-        {"p": "Raiz cubica de 64 + 5^2", "ops": ["29", "21", "24"], "c": "29"},
-        {"p": "Nivel 1: Raiz de 400 dividido 5", "ops": ["4", "8", "20"], "c": "4"}
+        {"p": "Steve tiene 2^5 bloques. Explota la raiz de 64. ¿Quedan?", "ops": ["24", "26", "28"], "c": "24"},
+        {"p": "Raiz de 256 dividido por 2^2", "ops": ["4", "8", "16"], "c": "4"},
+        {"p": "Un Creeper hace 3^2 + 4^2 de daño. ¿Total?", "ops": ["25", "49", "14"], "c": "25"},
+        {"p": "2^4 + 3^3 - raiz de 49", "ops": ["36", "40", "33"], "c": "36"},
+        {"p": "Raiz cubica de 125 multiplicada por 2^3", "ops": ["40", "15", "60"], "c": "40"},
+        {"p": "BOSS 1: (5^2 * 2) / raiz de 25", "ops": ["10", "20", "5"], "c": "10"}
     ]
+    # NIVEL MEDIO (Operaciones combinadas)
     m = [
-        {"p": "WITHER: (2^3)^2 - Raiz de 16", "ops": ["60", "32", "64"], "c": "60"},
-        {"p": "Raiz de la raiz de 625", "ops": ["5", "25", "10"], "c": "5"},
-        {"p": "Que es mayor: 5^3 o 11^2?", "ops": ["5^3", "11^2", "Iguales"], "c": "5^3"},
-        {"p": "Raiz de 225 x Raiz de 4", "ops": ["30", "15", "60"], "c": "30"},
-        {"p": "Portal: alto R-144, ancho R-100. Area?", "ops": ["120", "22", "200"], "c": "120"},
-        {"p": "4^3 - 3^4", "ops": ["-17", "17", "7"], "c": "-17"},
-        {"p": "Nivel 2: R-cubica 1000 x 2^3", "ops": ["80", "60", "100"], "c": "80"}
+        {"p": "WITHER: raiz de 625 + 2^6 - 10", "ops": ["79", "69", "89"], "c": "79"},
+        {"p": "Raiz de (144 + 25) + 3^2", "ops": ["22", "13", "18"], "c": "22"},
+        {"p": "Calcula: (2^3 * 3^2) / raiz de 81", "ops": ["8", "12", "6"], "c": "8"},
+        {"p": "Portal: alto raiz de 225, ancho raiz de 121. Area?", "ops": ["165", "150", "180"], "c": "165"},
+        {"p": "Si 2^x = 128, ¿cuanto vale x?", "ops": ["7", "6", "8"], "c": "7"},
+        {"p": "4^3 / 2^4 + raiz de 100", "ops": ["14", "12", "18"], "c": "14"},
+        {"p": "BOSS 2: raiz(raiz(1296)) * 2", "ops": ["12", "18", "6"], "c": "12"}
     ]
+    # NIVEL DIFÍCIL (Hardcore)
     d = [
-        {"p": "HARDCORE: R-16 x (3^4 / 9)", "ops": ["36", "27", "81"], "c": "36"},
-        {"p": "(2^2 x 5^2) - Raiz de 144", "ops": ["88", "100", "76"], "c": "88"},
-        {"p": "R-169 + R-196 + R-225", "ops": ["42", "30", "45"], "c": "42"},
-        {"p": "2^7 / Raiz de 64", "ops": ["16", "32", "8"], "c": "16"},
-        {"p": "Warden: R-cubica 216 + 7^2", "ops": ["55", "49", "60"], "c": "55"},
-        {"p": "(10^2 - 8^2) + Raiz de 1", "ops": ["37", "36", "19"], "c": "37"},
-        {"p": "FINAL: Raiz de 625 - 5^2", "ops": ["0", "5", "25"], "c": "0"}
+        {"p": "WARDEN: (10^2 - 8^2) / raiz de 9", "ops": ["12", "36", "10"], "c": "12"},
+        {"p": "Raiz cubica de 729 + 4^3 - 2^5", "ops": ["41", "51", "31"], "c": "41"},
+        {"p": "Calcula: 2^-1 * 100 + raiz de 169", "ops": ["63", "50", "69"], "c": "63"},
+        {"p": "Si un Ghast lanza 3^4 bolas y fallas 2^6, ¿acertaste?", "ops": ["17", "21", "27"], "c": "17"},
+        {"p": "Raiz de 441 + raiz de 484", "ops": ["43", "45", "41"], "c": "43"},
+        {"p": "(raiz de 1024 / 4) * 3", "ops": ["24", "32", "18"], "c": "24"},
+        {"p": "FINAL: 1^100 + 0^5 - (raiz de 1)", "ops": ["0", "1", "100"], "c": "0"}
     ]
     
-    # Mezclamos el orden de las preguntas
-    random.shuffle(f)
-    random.shuffle(m)
-    random.shuffle(d)
-    
-    todas = f + m + d
-    
-    # NUEVO: Mezclamos las opciones de respuesta de cada pregunta
-    for pregunta in todas:
-        random.shuffle(pregunta["ops"])
-    
-    st.session_state.preguntas = todas
+    random.shuffle(f); random.shuffle(m); random.shuffle(d)
+    st.session_state.preguntas = f + m + d
     st.session_state.score = 0
     st.session_state.current = 0
     st.session_state.boss_active = False
+    st.session_state.vidas = 3  # Empezamos con 3 vidas
 
+# --- LÓGICA DE VIDAS ---
+if st.session_state.vidas <= 0:
+    st.title("💀 GAME OVER 💀")
+    st.image("https://media.tenor.com/7Yf0L2G1H6sAAAAi/minecraft-death.gif")
+    st.write(f"Has caído en combate. Puntuación final: {st.session_state.score}/20")
+    if st.button("REINTENTAR (RESPAWN) 🔄"):
+        del st.session_state.preguntas
+        st.rerun()
+    st.stop()
+
+# --- INTERFAZ ---
 curr = st.session_state.current
+vidas_html = " ❤️ " * st.session_state.vidas
+st.markdown(f"<p class='heart'>{vidas_html}</p>", unsafe_allow_html=True)
 
+# --- JEFES ---
 if st.session_state.get('boss_active', False):
-    if curr == 6:
-        st.write("## ⚠️ ¡EL ENDER DRAGON!")
-        st.image("https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", width=700)
-        if st.button("DERROTAR CON ORO ⚔️"):
-            st.session_state.boss_active = False
-            st.rerun()
-    elif curr == 13:
-        st.write("## 💀 ¡EL WITHER ESTÁ AQUÍ!")
-        st.image("https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", width=700)
-        if st.button("DERROTAR CON DIAMANTE 💎"):
-            st.session_state.boss_active = False
-            st.rerun()
-    elif curr == 20:
-        st.write("## 🕶️ ¡EL WARDEN TE HA DETECTADO!")
-        st.image("https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", width=700)
-        if st.button("ESCAPE CON NETHERITE 🔥"):
-            st.session_state.boss_active = False
-            st.rerun()
+    bosses = {
+        6: ["⚠️ ENDER DRAGON", "https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", "ORO"],
+        13: ["💀 WITHER", "https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", "DIAMANTE"],
+        20: ["🕶️ WARDEN", "https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", "NETHERITE"]
+    }
+    nombre, img_url, mat = bosses[curr]
+    st.write(f"## {nombre}")
+    st.image(img_url, width=700)
+    if st.button(f"ATAQUE CRÍTICO DE {mat} ⚔️"):
+        st.session_state.boss_active = False
+        st.rerun()
 
+# --- PREGUNTAS ---
 elif curr < len(st.session_state.preguntas):
     q = st.session_state.preguntas[curr]
-    if curr < 6: btn, img = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
-    elif curr < 13: btn, img = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
-    else: btn, img = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
+    if curr < 6: b, i = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
+    elif curr < 13: b, i = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
+    else: b, i = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
     
-    st.title("Minecraft Math")
+    st.title("Minecraft Math: HARDCORE")
     col1, col2 = st.columns([3, 1])
-    col1.write(f"Pregunta {curr + 1}/20")
+    col1.write(f"Desafío {curr + 1}/20")
     col1.subheader(f"💀 {q['p']} 💀")
-    col2.image(img, width=70)
+    col2.image(i, width=70)
     
-    ans = st.radio("Respuesta:", q["ops"], key=f"r{curr}")
-    if st.button(f"ATACAR CON {btn} ⚔️"):
-        if ans == q["c"]: 
-            st.success("¡Bien!")
+    # Mezclamos opciones si es la primera vez que vemos la pregunta
+    ans = st.radio("Elige con cuidado:", q["ops"], key=f"r{curr}")
+    
+    if st.button(f"GOLPE DE {b} ⚔️"):
+        if ans == q["c"]:
+            st.success("¡IMPACTO!")
             st.session_state.score += 1
-        else: 
-            st.error(f"¡Mal! Era {q['c']}")
+        else:
+            st.error(f"¡FALLASTE! Perdiste un corazón. Era {q['c']}")
+            st.session_state.vidas -= 1
         
         st.session_state.current += 1
-        if st.session_state.current in [6, 13, 20]: 
+        if st.session_state.current in [6, 13, 20]:
             st.session_state.boss_active = True
         st.rerun()
     st.progress(curr / 20)
+
 else:
     st.balloons()
-    st.title("🏆 ¡GANASTE!")
-    st.write(f"Puntos: {st.session_state.score}/20")
-    if st.button("REINICIAR"):
+    st.title("🏆 ¡LEYENDA DEL OVERWORLD!")
+    st.write(f"Puntuación Perfecta: {st.session_state.score}/20")
+    if st.button("NUEVA AVENTURA 🔄"):
         del st.session_state.preguntas
         st.rerun()
