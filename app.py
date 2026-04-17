@@ -121,4 +121,6 @@ else:
     st.title("🏆 ¡MAESTRO DEL HARDCORE!")
     st.write(f"Has sobrevivido con {st.session_state.vidas} corazones.")
     st.write(f"Puntuación final: {st.session_state.score}/20")
-    if st.
+    if st.button("JUGAR DE NUEVO 🔄"):
+        del st.session_state.preguntas
+        st.rerun()
