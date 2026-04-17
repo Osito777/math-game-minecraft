@@ -73,4 +73,49 @@ st.markdown(f"<p class='heart'>{'❤️' * st.session_state.vidas}</p>", unsafe_
 # --- BOSSES ---
 if st.session_state.get('boss_active', False):
     bosses = {
-        6: ["⚠️ EL ENDER DRAGON
+        6: ["⚠️ EL ENDER DRAGON ACECHA", "https://media.tenor.com/I8CBI7yIlFsAAAAi/ender-dragon.gif", "ORO"],
+        13: ["💀 EL WITHER HA DESPERTADO", "https://media1.tenor.com/m/0C4A0FJB1EQAAAAd/wither-dance.gif", "DIAMANTE"],
+        20: ["🕶️ EL WARDEN TE ESCUCHA", "https://media.tenor.com/AAAQv0Hbb5wAAAAi/warden-minecraft-ward.gif", "NETHERITE"]
+    }
+    nombre, img, mat = bosses[curr]
+    st.write(f"## {nombre}")
+    st.image(img, width=700)
+    if st.button(f"GOLPE MAESTRO CON {mat} ⚔️"):
+        st.session_state.boss_active = False
+        st.rerun()
+
+# --- PREGUNTAS ---
+elif curr < len(st.session_state.preguntas):
+    q = st.session_state.preguntas[curr]
+    if curr < 6: color, espada = "ORO", "https://media.tenor.com/S7_bQqzBXa8AAAAi/terraria.gif"
+    elif curr < 13: color, espada = "DIAMANTE", "https://media.tenor.com/AzZN3_XFVCkAAAAi/minecraft-sword.gif"
+    else: color, espada = "NETHERITE", "https://media.tenor.com/cf_fWrmI0ywAAAAi/nigerite-sword.gif"
+    
+    st.title("Math Craft: Ultra-Hardcore")
+    c1, c2 = st.columns([3, 1])
+    c1.write(f"**Desafío {curr + 1} / 20** | Score: {st.session_state.score}")
+    c1.subheader(f"💀 {q['p']} 💀")
+    c2.image(espada, width=80)
+    
+    res = st.radio("Respuesta:", q["ops"], key=f"r{curr}")
+    if st.button(f"ATACAR CON {color} ⚔️"):
+        if res == q["c"]:
+            st.success("¡CRÍTICO!")
+            st.session_state.score += 1
+        else:
+            st.error(f"¡FALLO! Perdiste un corazón. La respuesta era {q['c']}")
+            st.session_state.vidas -= 1
+        
+        st.session_state.current += 1
+        if st.session_state.current in [6, 13, 20]:
+            st.session_state.boss_active = True
+        st.rerun()
+    st.progress(curr / 20)
+
+else:
+    st.balloons()
+    st.title("🏆 ¡LEYENDA DEL INFINITO!")
+    st.write(f"Sobreviviste con {st.session_state.vidas} corazones. ¡Eres un genio!")
+    if st.button("REINICIAR MUNDO 🔄"):
+        del st.session_state.preguntas
+        st.rerun()
